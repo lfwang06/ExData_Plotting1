@@ -1,0 +1,16 @@
+file<-"E:/Wang/Coursera/Exploratory Data Analysis/household_power_consumption.txt"
+power<-read.table(file, header=TRUE,sep=";",na.strings=c("?"))
+subpower<-power[power$Date %in% c("1/2/2007","2/2/2007"),]
+datetime<-as.POSIXct(paste(subpower$Date,subpower$Time),format="%d/%m/%Y %H:%M:%S")
+newpower<-cbind(datetime,subpower)
+png(file="E:/Wang/Coursera/ExData_Plotting1/plot4.png")
+par(mfrow=c(2,2))
+with(newpower, plot(datetime,Global_active_power, type="l",xlab="",ylab="Global Active Power (kilowatts)"))
+with(newpower, plot(datetime,Voltage, type="l"))
+with(newpower,plot(datetime, Sub_metering_1, type="n",xlab="",ylab="Energy sub metering"))
+points(newpower$datetime,newpower$Sub_metering_1,type="l")
+points(newpower$datetime,newpower$Sub_metering_2,type="l",col="red")
+points(newpower$datetime,newpower$Sub_metering_3,type="l",col="blue")
+legend("topright",lwd=1,bty="n",col=c("black","red","blue"), legend=c("Sub_metering_1","Sub_metering_2","Sub_metering_3"))
+with(newpower, plot(datetime,Global_reactive_power, type="l"))
+dev.off()
